@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package cn.hannahl.ms.consumer;
+package cn.hannahl.ms.provider;
 
+import cn.hannahl.ms.api.FooService;
 import com.alibaba.csp.sentinel.slots.block.RuleConstant;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowRule;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowRuleManager;
+import org.apache.dubbo.config.spring.context.annotation.DubboComponentScan;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -29,24 +31,26 @@ import java.util.Collections;
  * @author fangjian
  */
 @SpringBootApplication
+@DubboComponentScan
 public class SentinelDubboProviderApp {
 
-	public static void main(String[] args) {
-		SpringApplicationBuilder providerBuilder = new SpringApplicationBuilder();
-		providerBuilder.web(WebApplicationType.NONE)
-				.sources(com.alibaba.cloud.examples.SentinelDubboProviderApp.class).run(args);
+    public static void main(String[] args) {
+        SpringApplicationBuilder providerBuilder = new SpringApplicationBuilder();
+        providerBuilder.web(WebApplicationType.NONE)
+                .sources(SentinelDubboProviderApp.class).run(args);
 
-		initRule();
-	}
+        initRule();
+    }
 
-	private static void initRule() {
-		FlowRule flowRule = new FlowRule();
-		flowRule.setResource(
-				"com.alibaba.cloud.examples.FooService:hello(java.lang.String)");
-		flowRule.setCount(10);
-		flowRule.setGrade(RuleConstant.FLOW_GRADE_QPS);
-		flowRule.setLimitApp("default");
-		FlowRuleManager.loadRules(Collections.singletonList(flowRule));
-	}
+    private static void initRule() {
+        FlowRule flowRule = new FlowRule();
+        flowRule.setResource(
+                FooService.class.getCanonicalName() +
+                        ":hello(java.lang.String)");
+        flowRule.setCount(10);
+        flowRule.setGrade(RuleConstant.FLOW_GRADE_QPS);
+        flowRule.setLimitApp("default");
+        FlowRuleManager.loadRules(Collections.singletonList(flowRule));
+    }
 
 }

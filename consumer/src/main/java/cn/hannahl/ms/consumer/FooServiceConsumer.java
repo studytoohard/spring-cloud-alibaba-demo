@@ -14,10 +14,25 @@
  * limitations under the License.
  */
 
-package cn.hannahl.ms.boot;
+package cn.hannahl.ms.consumer;
 
-public interface FooService {
+import cn.hannahl.ms.api.FooService;
+import org.apache.dubbo.config.annotation.Reference;
+import org.springframework.stereotype.Component;
 
-	String hello(String name);
+/**
+ * @author fangjian
+ */
+@Component
+public class FooServiceConsumer {
+
+	@Reference(version = "${foo.service.version}",
+			application = "${dubbo.application.id}",
+			url = "dubbo://${dubbo.protocol.host}:${dubbo.protocol.port}", timeout = 30000)
+	private FooService fooService;
+
+	public String hello(String name) {
+		return fooService.hello(name);
+	}
 
 }

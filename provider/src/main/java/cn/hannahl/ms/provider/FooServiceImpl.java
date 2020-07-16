@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.hannahl.ms.consumer;
+package cn.hannahl.ms.provider;
 
 import cn.hannahl.ms.api.FooService;
 import org.apache.dubbo.config.annotation.Service;
