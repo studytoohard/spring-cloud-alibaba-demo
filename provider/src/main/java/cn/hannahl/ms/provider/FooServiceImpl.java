@@ -18,17 +18,27 @@ package cn.hannahl.ms.provider;
 
 import cn.hannahl.ms.api.FooService;
 import org.apache.dubbo.config.annotation.Service;
+import org.apache.dubbo.rpc.RpcContext;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * @author fangjian
  */
-@Service(version = "${foo.service.version}", application = "${dubbo.application.id}",
-		protocol = "${dubbo.protocol.id}", registry = "${dubbo.registry.id}")
+@Service(version = "${foo.service.version}")
 public class FooServiceImpl implements FooService {
 
-	@Override
-	public String hello(String name) {
-		return "hello, " + name;
-	}
+    @Value("${spring.application.name}")
+    String serviceName;
+
+    @Override
+    public String hello(String name) {
+        RpcContext rpcContext = RpcContext.getContext();
+        return String.format("Service [name :%s , port : %d] %s(\"%s\") : Hello,%s",
+                serviceName,
+                rpcContext.getLocalPort(),
+                rpcContext.getMethodName(),
+                name,
+                name);
+    }
 
 }

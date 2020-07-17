@@ -17,40 +17,41 @@
 package cn.hannahl.ms.consumer;
 
 import com.alibaba.csp.sentinel.slots.block.SentinelRpcException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @author fangjian
+ * @author chentiwen
  */
 @SpringBootApplication
+@RestController
 public class SentinelDubboConsumerApp {
 
 	public static void main(String[] args) {
 		SpringApplicationBuilder consumerBuilder = new SpringApplicationBuilder();
-		ApplicationContext applicationContext = consumerBuilder
-				.web(WebApplicationType.NONE).sources(SentinelDubboConsumerApp.class)
+		ApplicationContext applicationContext = consumerBuilder.sources(SentinelDubboConsumerApp.class)
 				.run(args);
-
-		FooServiceConsumer service = applicationContext.getBean(FooServiceConsumer.class);
-
-		while (true) {
-			try {
-				caller(service);
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
-	private static void caller(FooServiceConsumer service) {
+	@Autowired
+	FooServiceConsumer fooServiceConsumer;
+
+	@GetMapping("/hello")
+	public void hello() {
+		caller();
+	}
+
+
+	private void caller() {
 		for (int i = 0; i < 15; i++) {
 			try {
-				String message = service.hello("Jim");
+				String message = fooServiceConsumer.hello("Jim");
 				System.out.println((i + 1) + " -> Success: " + message);
 			}
 			catch (SentinelRpcException ex) {

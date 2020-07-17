@@ -1,0 +1,10 @@
+[
+  {
+    "resource": "cn.hannahl.ms.api.FooService:hello(java.lang.String)",
+    "controlBehavior": 0,
+    "count": 10,
+    "grade": 1,
+    "limitApp": "default",
+    "strategy": 0
+  }
+]

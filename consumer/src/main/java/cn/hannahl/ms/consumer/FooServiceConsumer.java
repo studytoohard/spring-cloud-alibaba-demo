@@ -26,13 +26,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class FooServiceConsumer {
 
-	@Reference(version = "${foo.service.version}",
-			application = "${dubbo.application.id}",
-			url = "dubbo://${dubbo.protocol.host}:${dubbo.protocol.port}", timeout = 30000)
-	private FooService fooService;
+    @Reference(version = "${foo.service.version}", timeout = 30000)
+    private FooService fooService;
 
-	public String hello(String name) {
-		return fooService.hello(name);
-	}
+    public String hello(String name) {
+        return fooService.hello(name);
+    }
 
 }

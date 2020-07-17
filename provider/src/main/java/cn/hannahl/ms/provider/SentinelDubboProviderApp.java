@@ -39,7 +39,7 @@ public class SentinelDubboProviderApp {
         providerBuilder.web(WebApplicationType.NONE)
                 .sources(SentinelDubboProviderApp.class).run(args);
 
-        initRule();
+//        initRule();
     }
 
     private static void initRule() {
